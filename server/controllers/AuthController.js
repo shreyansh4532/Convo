@@ -48,13 +48,13 @@ export const login = async (req, res, next) => {
       email,
     });
 
-    if(!user) {
+    if (!user) {
       return res.status(404).send("User not found!");
     }
 
     const auth = compare(password, user.password);
 
-    if(!auth) {
+    if (!auth) {
       return res.status(400).send("Password is incorrect!");
     }
 
@@ -72,8 +72,28 @@ export const login = async (req, res, next) => {
         lastName: user.lastName,
         image: user.image,
         color: user.color,
-        profileSetup: user.profileSetup
-      }
+        profileSetup: user.profileSetup,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send("Internal Server Error");
+  }
+};
+
+export const getUserInfo = async (req, res) => {
+  try {
+
+    return res.status(200).json({
+      user: {
+        id: user._id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        image: user.image,
+        color: user.color,
+        profileSetup: user.profileSetup,
+      },
     });
   } catch (error) {
     console.log(error);
