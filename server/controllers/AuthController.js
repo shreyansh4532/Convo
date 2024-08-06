@@ -83,17 +83,17 @@ export const login = async (req, res, next) => {
 
 export const getUserInfo = async (req, res) => {
   try {
+    const userData = await User.findById(req.userID);
+    if (!userData) res.status(404).send("User with given id not found!");
 
     return res.status(200).json({
-      user: {
-        id: user._id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        image: user.image,
-        color: user.color,
-        profileSetup: user.profileSetup,
-      },
+      id: userData._id,
+      email: userData.email,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      image: userData.image,
+      color: userData.color,
+      profileSetup: userData.profileSetup,
     });
   } catch (error) {
     console.log(error);
