@@ -1,7 +1,7 @@
 import { compare } from "bcrypt";
 import User from "../models/UserModel.js";
 import jwt from "jsonwebtoken";
-import {rename, renameSync, unlinkSync} from "fs";
+import { rename, renameSync, unlinkSync } from "fs";
 
 const maxAge = 3 * 24 * 60 * 60 * 1000;
 
@@ -132,20 +132,22 @@ export const updateProfile = async (req, res) => {
 
 export const addProfileImage = async (req, res) => {
   try {
+    console.log(req.file);
 
-      console.log(req.file);
-      
-      if(!req.file) {
-        return res.status(400).send("File not present!");
-      }
+    if (!req.file) {
+      return res.status(400).send("File not present!");
+    }
 
-      const date = Date.now();
-      const fileName = "uploads/profiles/" + date + req.file.originalname;
-      
-      renameSync(req.file.path, fileName);
+    const date = Date.now();
+    const fileName = "uploads/profiles/" + date + req.file.originalname;
 
-      const updatedUserData = await User.findByIdAndUpdate(req.userID, {image: fileName},
-        { new: true, runValidators: true });
+    renameSync(req.file.path, fileName);
+
+    const updatedUserData = await User.findByIdAndUpdate(
+      req.userID,
+      { image: fileName },
+      { new: true, runValidators: true }
+    );
 
     return res.status(200).json({
       id: updatedUserData._id,
@@ -158,23 +160,34 @@ export const addProfileImage = async (req, res) => {
 };
 
 export const removeProfileImage = async (req, res) => {
-  try {  
-
-    const {userID} = req;
+  try {
+    const { userID } = req;
 
     const user = await User.findById(userID);
 
     console.log(user);
-    if(!user) return res.status(404).send("User not found!");    
+    if (!user) return res.status(404).send("User not found!");
 
-    if(user.image) {
-      unlinkSync(user.image); 
+    if (user.image) {
+      unlinkSync(user.image);
     }
-    
+
     user.image = null;
     await user.save();
 
-    return res.status(200).send("Profile image deleted successfully");    
+    return res.status(200).send("Profile image deleted successfully");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send("Internal Server Error");
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    
+    res.cookie("jwt", "", {maxAge: 1, sameSite: "None", secure: true});
+
+    return res.status(200).send("Logout Successfull.");
   } catch (error) {
     console.log(error);
     return res.status(500).send("Internal Server Error");
