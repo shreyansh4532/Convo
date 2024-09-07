@@ -5,6 +5,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import authRoutes from "./routes/AuthRoute.js";
 import contactRoutes from "./routes/ContactRoute.js";
+import setupSocket from "./socket.js";
 
 dotenv.config();
 
@@ -36,3 +37,5 @@ mongoose
 const server = app.listen(port, () => {
   console.log(`Server running on http://localhost/${port}`);
 });
+
+setupSocket(server);
