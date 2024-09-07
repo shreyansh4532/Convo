@@ -12,7 +12,7 @@ const setupSocket = (server) => {
     const userSocketMap = new Map();
 
     const disconnect = (socket) => {
-        console.log(`Client disconnect: ${socket.id}`);
+        console.log(`Client disconnected: ${socket.id}`);
 
         for(const [userId, socketId] of userSocketMap.entries()) {
             if(socketId === socket.id) {
