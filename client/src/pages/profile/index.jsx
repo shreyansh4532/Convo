@@ -84,7 +84,7 @@ const Profile = () => {
   };
 
   const handleImageChange = async (e) => {
-    //! File upload issue
+    //! ISSUE: File upload issue
     console.log("In handleImageChange");    
     const file = e.target.files[0];
     console.log({ file });
