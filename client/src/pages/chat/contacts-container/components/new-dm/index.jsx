@@ -88,14 +88,14 @@ const NewDM = () => {
           {/* LOTTIE SVG */}
 
           <ScrollArea className="h-[250px]">
-              {searchContacts.map((contact) => {
+              {searchContacts.map((contact) => (
                 <div
                   key={contact._id}
                   className="flex gap-3 cursor-pointer items-center"
                   onClick={() => handleSelectNewContact(contact)}
                 >
-                  <div className="w-3 h-3 relative">
-                    <Avatar className="h-3 w-3 overflow-hidden rounded-full">
+                  <div className="h-12 w-12">
+                    <Avatar className="h-12 w-12 overflow-hidden rounded-full">
                       {contact.image ? (
                         <AvatarImage
                           src={`${HOST}/userInfo.image`}
@@ -104,7 +104,7 @@ const NewDM = () => {
                         />
                       ) : (
                         <div
-                          className={`uppercase h-3 w-3 text-lg border-[1px] flex items-center justify-center rounded-full ${getColors(
+                          className={`uppercase h-12 w-12 text-lg border-[1px] flex items-center justify-center rounded-full ${getColors(
                             contact.color
                           )}`}
                         >
@@ -123,8 +123,8 @@ const NewDM = () => {
                     </span>
                     <span className="text-xs">{contact.email}</span>
                   </div>
-                </div>;
-              })}
+                </div>
+              ))}
             </ScrollArea>
 
           {searchContacts.length == 0 && (
