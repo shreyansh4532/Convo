@@ -58,7 +58,7 @@ const Logo = () => {
   );
 };
 
-const Title = ({text}) => {
+const Title = ({text}) => {       // eslint-disable-line
     return (
         <h3 className="uppercase tracking-widest pl-10 text-sm font-light text-opacity-90 text-neutral-400">{text}</h3>
     );

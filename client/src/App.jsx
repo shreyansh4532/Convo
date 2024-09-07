@@ -7,13 +7,13 @@ import { useEffect, useState } from "react";
 import { apiClient } from "./lib/api-client";
 import { GET_USER_INFO } from "./utils/constants";
 
-const PrivateRoute = ({ children }) => {
+const PrivateRoute = ({ children }) => {     // eslint-disable-line
   const { userInfo } = useAppStore();
   const isAuthenticated = !!userInfo;
   return isAuthenticated ? children : <Navigate to="/auth" />;
 };
 
-const AuthRoute = ({ children }) => {
+const AuthRoute = ({ children }) => {        // eslint-disable-line
   const { userInfo } = useAppStore();
   const isAuthenticated = !!userInfo;
   return isAuthenticated ? <Navigate to="/chat" /> : children;

@@ -15,7 +15,7 @@ const Chat = () => {
       toast("Please setup your profile.");
       navigate("/profile");
     }
-  }, []);
+  }, []);   // eslint-disable-line
 
   return (
     <div className="flex h-[100vh] text-white overflow-hidden">

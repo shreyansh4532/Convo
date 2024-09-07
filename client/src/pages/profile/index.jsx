@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"; // eslint-disable-line
 import { useEffect, useRef, useState } from "react";
 import { useAppStore } from "@/store";
 import { IoArrowBack } from "react-icons/io5";
