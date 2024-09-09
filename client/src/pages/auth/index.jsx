@@ -49,11 +49,11 @@ const Auth = () => {
     if(validateLogin()) {
       const res = await apiClient.post(LOGIN_ROUTE, {email, password}, {withCredentials: true});
       console.log(res);
-      if(res.data.user.id) {
+      if(res.status === 200 && res.data.user.id) {
         setUserInfo(res.data.user);
         if(res.data.user.profileSetup) navigate("/chat");
         else navigate("/profile");
-      }
+      }      
     }
   }
 

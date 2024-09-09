@@ -33,7 +33,11 @@ function App() {
         else setUserInfo(undefined);
         console.log(res);
       } catch (error) {
-        setUserInfo(undefined);
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+          // JWT is invalid or missing, force user logout
+          setUserInfo(undefined);
+        }
+        // setUserInfo(undefined);
         console.log({ error });
       } finally {        
         setLoading(false);
@@ -41,7 +45,7 @@ function App() {
     };
     if (!userInfo) getUserData();
     else setLoading(false);
-  }, [userInfo, setUserInfo]);
+  }, [setUserInfo]);                              // eslint-disable-line
 
   if (loading) {
     return <div>Loading...</div>;
