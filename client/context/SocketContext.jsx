@@ -6,12 +6,14 @@ import { io } from "socket.io-client";
 
 const SocketContext = createContext(null); // eslint-disable-line
 
-export const useSocket = () => { // eslint-disable-line
+export const useSocket = () => {
+  // eslint-disable-line
   return useContext(SocketContext);
 };
 
-export const SocketProvider = ({ children }) => { // eslint-disable-line
-  
+export const SocketProvider = ({ children }) => {
+  // eslint-disable-line
+
   const socket = useRef();
   const { userInfo } = useAppStore();
 
@@ -20,12 +22,29 @@ export const SocketProvider = ({ children }) => { // eslint-disable-line
     if (userInfo) {
       socket.current = io(HOST, {
         withCredentials: true,
-        query: {userId: userInfo.id},   
+        query: { userId: userInfo.id },
       });
 
       socket.current.on("connect", () => {
-        console.log(`Connected to Socket server`);        
-      })
+        console.log(`Connected to Socket server`);
+      });
+
+      const handleReceiveMessage = (message) => {
+        // eslint-disable-line
+        const { selectedChatData, selectedChatType, addMessage } =
+          useAppStore.getState();
+
+        if (
+          selectedChatType !== undefined &&
+          (selectedChatData._id === message.sender._id ||
+            selectedChatData._id === message.recipient._id)
+        ) {
+          addMessage(message);
+        }
+      };
+
+      socket.current.on("receiveMessage", handleReceiveMessage);
+
       // Component unmounts...
       return () => {
         socket.current.disconnect();

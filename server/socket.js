@@ -1,41 +1,61 @@
-import { Server as SocketIOServer } from 'socket.io';
+import { Server as SocketIOServer } from "socket.io";
+import Message from "./models/MessagesModel.js";
 
 const setupSocket = (server) => {
-    const io = new SocketIOServer(server, {
-        cors: {
-            origin: process.env.ORIGIN,
-            methods: ["GET", "POST"],
-            credentials: true,
-        }
-    }); 
+  const io = new SocketIOServer(server, {
+    cors: {
+      origin: process.env.ORIGIN,
+      methods: ["GET", "POST"],
+      credentials: true,
+    },
+  });
 
-    const userSocketMap = new Map();
+  const userSocketMap = new Map();
 
-    const disconnect = (socket) => {
-        console.log(`Client disconnected: ${socket.id}`);
+  const disconnect = (socket) => {
+    console.log(`Client disconnected: ${socket.id}`);
 
-        for(const [userId, socketId] of userSocketMap.entries()) {
-            if(socketId === socket.id) {
-                userSocketMap.delete(userId);
-                break;  
-            }
-        }
-        
+    for (const [userId, socketId] of userSocketMap.entries()) {
+      if (socketId === socket.id) {
+        userSocketMap.delete(userId);
+        break;
+      }
+    }
+  };
+
+  const sendMessage = async (message) => {
+    const senderSocketId = userSocketMap.get(message.sender);
+    const recipientSocketId = userSocketMap.get(message.recipient);
+
+    const createdMessage = await Message.create(message);
+
+    const messageData = await Message.findByID(createdMessage._id)
+      .populate("sender", "id email firstName lastName image color")
+      .populate("recipient", "id email firstName lastName image color");
+
+    if (recipientSocketId) {
+      io.to(recipientSocketId).emit("receiveMessage", messageData);
     }
 
-    io.on("connection", (socket) => {
-        console.log(`Socket variable: ${socket}`);
-        const userId = socket.handshake.query.userId;
+    if (senderSocketId) {
+      io.to(senderSocketId).emit("receiveMessage", messageData);
+    }
+  };
 
-        if(userId) {
-            userSocketMap.set(userId, socket.id);
-            console.log(`User connected: ${userId} with connection id: ${socket.id}`);            
-        } else {
-            console.log(`User ID not provided during connection`);            
-        }
+  io.on("connection", (socket) => {
+    console.log(`Socket variable: ${socket}`);
+    const userId = socket.handshake.query.userId;
 
-        socket.on("disconnect", () => disconnect(socket));
-    });
-}
+    if (userId) {
+      userSocketMap.set(userId, socket.id);
+      console.log(`User connected: ${userId} with connection id: ${socket.id}`);
+    } else {
+      console.log(`User ID not provided during connection`);
+    }
+
+    socket.on("disconnect", () => disconnect(socket));
+    socket.on("sendMessage", sendMessage);
+  });
+};
 
 export default setupSocket;
