@@ -34,9 +34,7 @@ const MessageBar = () => {
         messageType: "text",
         fileUrl: undefined,
         recipient: selectedChatData._id
-      })
-      console.log("MSG SENT!!");
-      
+      })      
     }
   };
 

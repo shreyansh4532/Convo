@@ -6,13 +6,11 @@ import { io } from "socket.io-client";
 
 const SocketContext = createContext(null); // eslint-disable-line
 
-export const useSocket = () => {
-  // eslint-disable-line
+export const useSocket = () => {   // eslint-disable-line
   return useContext(SocketContext);
 };
 
-export const SocketProvider = ({ children }) => {
-  // eslint-disable-line
+export const SocketProvider = ({ children }) => {  // eslint-disable-line
 
   const socket = useRef();
   const { userInfo } = useAppStore();
@@ -40,6 +38,8 @@ export const SocketProvider = ({ children }) => {
             selectedChatData._id === message.recipient._id)
         ) {
           addMessage(message);
+          console.log("MSG RCV: ", message);
+          
         }
       };
 

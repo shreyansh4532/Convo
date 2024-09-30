@@ -4,7 +4,7 @@ import Message from "./models/MessagesModel.js";
 const setupSocket = (server) => {
   const io = new SocketIOServer(server, {
     cors: {
-      origin: process.env.ORIGIN,
+      origin: [process.env.ORIGIN, process.env.OTHER_ORIGIN],
       methods: ["GET", "POST"],
       credentials: true,
     },
@@ -29,7 +29,7 @@ const setupSocket = (server) => {
 
     const createdMessage = await Message.create(message);
 
-    const messageData = await Message.findByID(createdMessage._id)
+    const messageData = await Message.findById(createdMessage._id)
       .populate("sender", "id email firstName lastName image color")
       .populate("recipient", "id email firstName lastName image color");
 
