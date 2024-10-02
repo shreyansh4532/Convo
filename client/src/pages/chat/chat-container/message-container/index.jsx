@@ -1,12 +1,26 @@
+/* eslint-disable */
+
+import { apiClient } from "@/lib/api-client";
 import { useAppStore } from "@/store";
+import { GET_MESSAGES_ROUTE } from "@/utils/constants";
 import moment from "moment";
 import { useEffect, useRef } from "react";
 
 const MessageContainer = () => {
-  // eslint-disable-next-line
-  const { selectedChatType, selectedChatData, userInfo, selectedChatMessages } =
+  const { selectedChatType, selectedChatData, userInfo, selectedChatMessages, setSelectedChatMessages } =
     useAppStore();
   const scrollRef = useRef();
+
+  useEffect(() => {
+    const getMessages = async () => {
+      const res = await apiClient.post(GET_MESSAGES_ROUTE, {userID: selectedChatData._id}, {withCredentials: true});
+      console.log(res.data.messages);
+      setSelectedChatMessages(res.data.messages);
+    }
+    if(selectedChatData) {
+      getMessages();
+    }
+  }, [selectedChatData]);
 
   useEffect(() => {
     if (scrollRef.current)

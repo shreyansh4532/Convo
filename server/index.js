@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import authRoutes from "./routes/AuthRoute.js";
 import contactRoutes from "./routes/ContactRoute.js";
 import setupSocket from "./socket.js";
+import messageRoutes from "./routes/MessagesRoute.js";
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/messages', messageRoutes);
 
 mongoose
   .connect(databaseURL)

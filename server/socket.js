@@ -43,7 +43,7 @@ const setupSocket = (server) => {
   };
 
   io.on("connection", (socket) => {
-    console.log(`Socket variable: ${socket}`);
+    // console.log(`Socket variable: ${socket}`);
     const userId = socket.handshake.query.userId;
 
     if (userId) {
