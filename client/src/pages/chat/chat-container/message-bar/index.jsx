@@ -35,6 +35,7 @@ const MessageBar = () => {
         fileUrl: undefined,
         recipient: selectedChatData._id
       })      
+      setMessage("");
     }
   };
 
